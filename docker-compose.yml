@@ -1,0 +1,63 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.18.0
+    restart: unless-stopped
+    volumes:
+      - qdrant-storage:/qdrant/storage
+    ports:
+      - "127.0.0.1:${RAG_QDRANT_PORT:-6333}:6333"
+    healthcheck:
+      test: ["CMD", "bash", "-c", ":> /dev/tcp/127.0.0.1/6333"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  rag-api:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - path: ./.env
+        required: false
+    environment:
+      RAG_HOST: 0.0.0.0
+      RAG_PORT: "8080"
+      RAG_QDRANT_URL: http://qdrant:6333
+      RAG_DOCUMENTS_DIR: /app/documents/rag
+    ports:
+      - "127.0.0.1:${RAG_API_PORT:-8080}:8080"
+    volumes:
+      - ./documents:/app/documents:ro
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2)",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  rag-ingest:
+    build: .
+    profiles: ["maintenance"]
+    env_file:
+      - path: ./.env
+        required: false
+    environment:
+      RAG_QDRANT_URL: http://qdrant:6333
+      RAG_DOCUMENTS_DIR: /app/documents/rag
+    volumes:
+      - ./documents:/app/documents:ro
+    command: ["smart-rag", "ingest"]
+    depends_on:
+      qdrant:
+        condition: service_healthy
+
+volumes:
+  qdrant-storage:
+

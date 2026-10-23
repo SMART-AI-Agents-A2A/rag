@@ -1,0 +1,11 @@
+.git
+.env
+.venv
+__pycache__
+.pytest_cache
+.ruff_cache
+qdrant_storage
+tests
+evaluation
+documents/sources/raw
+

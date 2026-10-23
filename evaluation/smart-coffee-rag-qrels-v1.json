@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "description": "Human-reviewable reference outputs for a deliberately small documentary RAG subset.",
+  "qrels": [
+    {
+      "id": "fao56-water-requirement-en-v1",
+      "locale": "en-US",
+      "case_id": "rag-011",
+      "expected_sources": [
+        "fao-irrigation-drainage-paper-56-crop-evapotranspiration"
+      ],
+      "relevant_concepts": ["ETc = Kc × ETo", "reference evapotranspiration", "crop coefficient"],
+      "expected_output": "Under the FAO 56 single crop-coefficient approach, crop evapotranspiration is estimated as ETc = Kc × ETo. ETo represents the atmospheric demand for a reference surface, while Kc adjusts that demand for the crop and its development stage."
+    },
+    {
+      "id": "fao56-water-requirement-pt-br-v1",
+      "locale": "pt-BR",
+      "case_id": "rag-011",
+      "expected_sources": [
+        "fao-irrigation-drainage-paper-56-crop-evapotranspiration"
+      ],
+      "relevant_concepts": ["ETc = Kc × ETo", "evapotranspiração de referência", "coeficiente de cultura"],
+      "expected_output": "Na abordagem de coeficiente único do FAO 56, a evapotranspiração da cultura é estimada por ETc = Kc × ETo. ETo representa a demanda atmosférica para uma superfície de referência, enquanto Kc ajusta essa demanda para a cultura e seu estágio de desenvolvimento."
+    }
+  ]
+}

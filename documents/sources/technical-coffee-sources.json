@@ -1,0 +1,141 @@
+{
+  "documents": [
+    {
+      "pdf": "Fenologiadocafeeiro.pdf",
+      "markdown": "fenologia-balanco-hidrico-cafeeiro.md",
+      "title": "Fenologia do Cafeeiro: Condições Agrometeorológicas e Balanço Hídrico do Ano Agrícola 2004-2005",
+      "year": 2009,
+      "crop": "coffee",
+      "region": "brasil",
+      "topic": "fenologia-balanco-hidrico",
+      "document_type": "technical_document",
+      "scope": "Fenologia do cafeeiro, condições agrometeorológicas e balanço hídrico no ano agrícola 2004-2005.",
+      "reference": "Embrapa Café, Documentos 5."
+    },
+    {
+      "pdf": "Cirtec32.pdf",
+      "markdown": "coeficientes-tecnicos-irrigacao-cafeeiro-cerrado.md",
+      "title": "Coeficientes Técnicos para Irrigação do Cafeeiro no Cerrado",
+      "year": 2016,
+      "crop": "coffee",
+      "region": "cerrado",
+      "topic": "coeficientes-irrigacao",
+      "document_type": "technical_document",
+      "scope": "Coeficientes técnicos e critérios de manejo de irrigação para cafeeiro no Cerrado.",
+      "reference": "Circular técnica Embrapa Cerrados, ISSN 1517-0187."
+    },
+    {
+      "pdf": "admin_Biosci-2006-291.pdf",
+      "markdown": "manejo-irrigacao-gotejamento-cafeeiro.md",
+      "title": "Manejo da Irrigação por Gotejamento no Cafeeiro (Coffea arabica L.)",
+      "year": 2006,
+      "crop": "coffee",
+      "region": "brasil",
+      "topic": "gotejamento",
+      "document_type": "technical_document",
+      "scope": "Manejo de irrigação localizada por gotejamento em cafeeiro arábica.",
+      "reference": "Original Article, Bioscience Journal."
+    },
+    {
+      "pdf": "AP-Implantacao-agricultura-2024.pdf",
+      "markdown": "agricultura-precisao-cafes-especiais-sul-minas.md",
+      "title": "Implantação da Agricultura de Precisão para Manejo Diferenciado em Sistema de Produção de Cafés Especiais na Região Sul de Minas Gerais",
+      "year": 2024,
+      "crop": "coffee",
+      "region": "sul-de-minas",
+      "topic": "agricultura-precisao",
+      "document_type": "technical_document",
+      "scope": "Agricultura de precisão, variabilidade espacial e manejo diferenciado em cafés especiais no sul de Minas Gerais.",
+      "reference": "Publicação técnica Embrapa sobre agricultura de precisão em cafés especiais."
+    },
+    {
+      "pdf": "Cafe-na-AmazoniaDENIS.pdf",
+      "markdown": "irrigacao-cafeeiros-amazonia-rondonia.md",
+      "title": "Irrigação em Cafeeiros na Amazônia",
+      "year": 2015,
+      "crop": "coffee",
+      "region": "amazonia-rondonia",
+      "topic": "irrigacao-balanco-hidrico",
+      "document_type": "technical_document",
+      "scope": "Informações técnicas sobre irrigação, necessidade hídrica e manejo de cafeeiros em condições amazônicas, com foco em Rondônia.",
+      "reference": "Capítulo técnico de Café na Amazônia."
+    },
+    {
+      "pdf": "Coffea arabica L.pdf",
+      "markdown": "coffea-arabica-fenologia-clima.md",
+      "title": "Coffea arabica L.: History, Phenology and Climatic Aptitude of the State of São Paulo, Brazil",
+      "year": 2020,
+      "crop": "coffee",
+      "region": "brasil-sao-paulo",
+      "topic": "coffea-arabica-fenologia-clima",
+      "document_type": "technical_document",
+      "scope": "História, fenologia e aptidão climática de Coffea arabica no estado de São Paulo.",
+      "reference": "Review article, Arquivos do Instituto Biológico, DOI 10.1590/1808-1657000602020."
+    },
+    {
+      "pdf": "CarlosReisserdigitalizar0009.pdf",
+      "markdown": "vantagens-irrigacao-gotejamento.md",
+      "title": "As Vantagens da Irrigação por Gotejamento",
+      "year": null,
+      "crop": "agriculture",
+      "region": "brasil",
+      "topic": "irrigacao-gotejamento",
+      "document_type": "technical_article",
+      "scope": "Artigo técnico sobre histórico, benefícios, fertirrigação, filtragem e limitações da irrigação por gotejamento.",
+      "reference": "Artigo técnico Gotejo, Carlos Reisser Júnior, Embrapa Clima Temperado.",
+      "language": "pt-BR"
+    },
+    {
+      "pdf": "Manualagricultura.pdf",
+      "markdown": "manual-agricultura-precision.md",
+      "title": "Manual de Agricultura de Precisión",
+      "year": 2014,
+      "crop": "agriculture",
+      "region": "cono-sur",
+      "topic": "agricultura-precision",
+      "document_type": "technical_manual",
+      "scope": "Manual em espanhol sobre diagnóstico, integração de informações, tomada de decisão e implementação de agricultura de precisão no Cone Sul.",
+      "reference": "IICA/PROCISUR, Manual de agricultura de precisión, Montevideo, 2014, ISBN 978-92-9248-545-0.",
+      "language": "es"
+    },
+    {
+      "pdf": "manual-for-arabica-cultivation-vs.pdf",
+      "markdown": "manual-arabica-cultivation-vietnam.md",
+      "title": "Manual for Arabica Cultivation",
+      "year": 2004,
+      "crop": "coffee",
+      "region": "vietnam-quang-tri",
+      "topic": "arabica-cultivation",
+      "document_type": "technical_manual",
+      "scope": "Good Agricultural Practices for sustainable Arabica coffee production, including soils, planting, nutrition, composting, pruning, pests, harvest, quality and market topics.",
+      "reference": "Tan Lam Agricultural Product Joint Stock Company and PPP Project Improvement of Coffee Quality and Sustainability of Coffee Production in Vietnam.",
+      "language": "en"
+    },
+    {
+      "pdf": "smart_project_final.pdf",
+      "markdown": "smart-sustainable-management-agriculture-computing-continuum.md",
+      "title": "SMART: Sustainable Management of Agriculture with the Intelligent Computing Continuum",
+      "year": 2024,
+      "crop": "coffee-wheat",
+      "region": "brasil-china",
+      "topic": "smart-agriculture-computing-continuum",
+      "document_type": "project_proposal",
+      "scope": "Projeto temático FAPESP/NSFC sobre agricultura sustentável com IoT, sensoriamento, edge/cloud computing e inteligência artificial, com pilotos em café e trigo.",
+      "reference": "Thematic Research Project submitted to FAPESP/NSFC, Principal Investigator Prof. Carlos Alberto Kamienski, Santo André, September 2024.",
+      "language": "en"
+    },
+    {
+      "pdf": "FAOIrrigation andDrainagePaperNo56.pdf",
+      "markdown": "fao-irrigation-drainage-paper-56-crop-evapotranspiration.md",
+      "title": "Crop Evapotranspiration: Guidelines for Computing Crop Water Requirements",
+      "year": 1998,
+      "crop": "multiple_crops",
+      "region": "global",
+      "topic": "evapotranspiration-crop-water-requirements",
+      "document_type": "technical_manual",
+      "language": "en",
+      "scope": "FAO method and guidelines for estimating reference evapotranspiration, crop evapotranspiration and crop water requirements for irrigation planning and management.",
+      "reference": "FAO Irrigation and Drainage Paper 56."
+    }
+  ]
+}
