@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from smart_rag.corpus import load_corpus, split_document
+from rag.corpus import load_corpus, split_document
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -37,8 +37,21 @@ def test_chunk_ids_are_deterministic() -> None:
 
 def test_provenance_manifest_resolves_every_original_pdf() -> None:
     sources_root = ROOT / "documents" / "sources"
-    manifest = json.loads((sources_root / "technical-coffee-sources.json").read_text(encoding="utf-8"))
+    manifest = json.loads((sources_root / "manifest.json").read_text(encoding="utf-8"))
     entries = manifest["documents"]
 
     assert len(entries) == 11
     assert all((sources_root / "raw" / entry["pdf"]).is_file() for entry in entries)
+    for entry in entries:
+        with (sources_root / "raw" / entry["pdf"]).open("rb") as source:
+            assert source.read(5) == b"%PDF-"
+        matches = list((ROOT / "documents" / "rag").glob(f"*/{entry['markdown']}"))
+        assert len(matches) == 1
+
+
+def test_reference_judgments_resolve_corpus_documents() -> None:
+    qrels = json.loads((ROOT / "evaluation" / "qrels-v1.json").read_text(encoding="utf-8"))
+    stems = {path.stem for path in (ROOT / "documents" / "rag").glob("*/*.md")}
+    assert qrels["qrels"]
+    for judgment in qrels["qrels"]:
+        assert set(judgment["expected_sources"]) <= stems

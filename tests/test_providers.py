@@ -2,9 +2,9 @@ import json
 
 import httpx
 
-from smart_rag.models import MetadataFilters
-from smart_rag.providers import OpenRouterClient, parse_json_object, sanitize_planned_filters
-from smart_rag.settings import Settings
+from rag.models import MetadataFilters
+from rag.providers import OpenRouterClient, parse_json_object, sanitize_planned_filters
+from rag.settings import Settings
 
 
 def test_embedding_response_is_restored_by_index() -> None:

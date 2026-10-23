@@ -5,13 +5,13 @@ from collections.abc import Sequence
 
 import uvicorn
 
-from smart_rag.models import QueryRequest
-from smart_rag.service import RagService
-from smart_rag.settings import get_settings
+from rag.models import QueryRequest
+from rag.service import RagService
+from rag.settings import get_settings
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="smart-rag", description="Standalone SMART/AROMA RAG service")
+    parser = argparse.ArgumentParser(prog="rag", description="Documentary retrieval and generation service")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     subparsers.add_parser("serve", help="Start the HTTP API")
@@ -39,11 +39,15 @@ def main(argv: Sequence[str] | None = None) -> None:
 
     if args.command == "serve":
         uvicorn.run(
-            "smart_rag.api:app",
+            "rag.api:app",
             host=settings.host,
             port=settings.port,
             log_level=settings.log_level.lower(),
         )
+        return
+
+    if args.command == "config":
+        print(json.dumps(settings.public_configuration(), ensure_ascii=False, indent=2))
         return
 
     service = RagService(settings)
@@ -60,9 +64,6 @@ def main(argv: Sequence[str] | None = None) -> None:
             )
         elif args.command == "documents":
             output = service.list_documents()
-        elif args.command == "config":
-            print(json.dumps(settings.public_configuration(), ensure_ascii=False, indent=2))
-            return
         else:  # argparse makes this unreachable
             raise RuntimeError(f"unsupported command: {args.command}")
         if isinstance(output, list):

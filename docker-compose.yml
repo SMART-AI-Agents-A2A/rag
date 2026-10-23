@@ -2,6 +2,15 @@ services:
   qdrant:
     image: qdrant/qdrant:v1.18.0
     restart: unless-stopped
+    environment:
+      RAG_QDRANT_API_KEY: ${RAG_QDRANT_API_KEY:-}
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - |
+        if [ -n "$$RAG_QDRANT_API_KEY" ]; then
+          export QDRANT__SERVICE__API_KEY="$$RAG_QDRANT_API_KEY"
+        fi
+        exec ./entrypoint.sh
     volumes:
       - qdrant-storage:/qdrant/storage
     ports:
@@ -13,7 +22,10 @@ services:
       retries: 10
 
   rag-api:
-    build: .
+    image: rag:1.0.0
+    build:
+      context: .
+      target: runtime
     restart: unless-stopped
     env_file:
       - path: ./.env
@@ -43,7 +55,10 @@ services:
       retries: 10
 
   rag-ingest:
-    build: .
+    image: rag:1.0.0
+    build:
+      context: .
+      target: runtime
     profiles: ["maintenance"]
     env_file:
       - path: ./.env
@@ -53,7 +68,20 @@ services:
       RAG_DOCUMENTS_DIR: /app/documents/rag
     volumes:
       - ./documents:/app/documents:ro
-    command: ["smart-rag", "ingest"]
+    command: ["rag", "ingest"]
+    depends_on:
+      qdrant:
+        condition: service_healthy
+
+  rag-tests:
+    image: rag-tests:1.0.0
+    build:
+      context: .
+      target: test
+    profiles: ["test"]
+    environment:
+      RAG_QDRANT_API_KEY: ${RAG_QDRANT_API_KEY:-}
+    command: ["python", "-m", "pytest", "-p", "no:cacheprovider", "--qdrant-url=http://qdrant:6333"]
     depends_on:
       qdrant:
         condition: service_healthy

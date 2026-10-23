@@ -14,8 +14,8 @@ from qdrant_client.models import (
     VectorParams,
 )
 
-from smart_rag.models import Chunk, MetadataFilters
-from smart_rag.settings import Settings
+from rag.models import Chunk, MetadataFilters
+from rag.settings import Settings
 
 
 class StoreError(RuntimeError):

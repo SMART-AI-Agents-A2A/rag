@@ -6,7 +6,7 @@ from uuid import NAMESPACE_URL, uuid5
 
 import yaml
 
-from smart_rag.models import Chunk, CorpusDocument, DocumentMetadata, DocumentSummary
+from rag.models import Chunk, CorpusDocument, DocumentMetadata, DocumentSummary
 
 FRONTMATTER_BOUNDARY = "---"
 SUPPORTED_SUFFIXES = {".md", ".txt"}
@@ -25,7 +25,7 @@ REQUIRED_METADATA = {
 
 
 class CorpusError(ValueError):
-    """Raised when a corpus artifact violates the standalone RAG contract."""
+    """Raised when a corpus artifact violates the indexing contract."""
 
 
 def load_corpus(

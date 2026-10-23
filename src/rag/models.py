@@ -126,7 +126,10 @@ class QueryRequest(StrictModel):
     @field_validator("query")
     @classmethod
     def normalize_query(cls, value: str) -> str:
-        return " ".join(value.split())
+        normalized = " ".join(value.split())
+        if len(normalized) < 2:
+            raise ValueError("query must contain at least two non-whitespace characters")
+        return normalized
 
 
 class QueryResponse(StrictModel):
@@ -170,7 +173,7 @@ class DocumentSummary(StrictModel):
 
 class HealthResponse(StrictModel):
     status: str
-    service: str = "smart-rag"
+    service: str = "rag"
     qdrant: str
     collection: str
     collection_exists: bool

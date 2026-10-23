@@ -5,8 +5,8 @@ from collections import defaultdict
 from time import monotonic
 from typing import Any
 
-from smart_rag.corpus import load_corpus, split_corpus, summarize_documents
-from smart_rag.models import (
+from rag.corpus import load_corpus, split_corpus, summarize_documents
+from rag.models import (
     Answerability,
     DataQualityStatus,
     EvidenceItem,
@@ -18,9 +18,9 @@ from smart_rag.models import (
     QueryResponse,
     RetrievalAssessment,
 )
-from smart_rag.providers import OpenRouterClient, ProviderError
-from smart_rag.settings import Settings
-from smart_rag.store import QdrantStore, SearchCandidate
+from rag.providers import OpenRouterClient, ProviderError
+from rag.settings import Settings
+from rag.store import QdrantStore, SearchCandidate
 
 logger = logging.getLogger(__name__)
 CITATION_PATTERN = re.compile(r"\[([^\[\]]+)\]")
@@ -114,7 +114,18 @@ class RagService:
             filters=request.filters or MetadataFilters(),
             planning_degraded=True,
         )
-        if not self.store.collection_exists():
+        try:
+            collection_exists = self.store.collection_exists()
+        except Exception as exc:
+            logger.exception("vector store is unavailable")
+            return empty_query_response(
+                request.query,
+                fallback_plan,
+                status=DataQualityStatus.SOURCE_ERROR,
+                limitation="retrieval_source_error",
+                metadata={"collection": self.settings.collection_name, "error_type": type(exc).__name__},
+            )
+        if not collection_exists:
             return empty_query_response(
                 request.query,
                 fallback_plan,

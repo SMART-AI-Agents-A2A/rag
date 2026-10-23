@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     qdrant_url: str = "http://127.0.0.1:6333"
     qdrant_api_key: str | None = None
     qdrant_timeout_seconds: float = Field(default=20.0, ge=1.0)
-    collection_name: str = "coffee_documents"
+    collection_name: str = "rag_documents"
 
     documents_dir: Path = Path("documents/rag")
     default_language: str = "pt-BR"
@@ -49,18 +49,18 @@ class Settings(BaseSettings):
 
     query_planning_enabled: bool = True
     query_model: str = "meta-llama/llama-3.1-8b-instruct"
-    query_temperature: float = Field(default=0.1, ge=0.0, le=2.0)
+    query_temperature: float = Field(default=0.5, ge=0.0, le=2.0)
     query_top_p: float = Field(default=1.0, gt=0.0, le=1.0)
 
     answer_enabled: bool = True
     answer_model: str = "deepseek/deepseek-v4-flash"
-    answer_temperature: float = Field(default=0.4, ge=0.0, le=2.0)
+    answer_temperature: float = Field(default=0.7, ge=0.0, le=2.0)
     answer_top_p: float = Field(default=1.0, gt=0.0, le=1.0)
     answer_max_tokens: int = Field(default=900, ge=64, le=8192)
 
     sufficiency_judge_enabled: bool = False
     sufficiency_judge_model: str = "openai/gpt-4o-mini"
-    sufficiency_judge_temperature: float = Field(default=0.1, ge=0.0, le=2.0)
+    sufficiency_judge_temperature: float = Field(default=0.5, ge=0.0, le=2.0)
     sufficiency_judge_top_p: float = Field(default=1.0, gt=0.0, le=1.0)
 
     chunk_size: int = Field(default=1000, ge=200)
@@ -92,6 +92,7 @@ class Settings(BaseSettings):
             "documents_dir": str(self.documents_dir),
             "allowed_languages": list(self.languages),
             "embedding_model": self.embedding_model,
+            "model_provider": "OpenRouter",
             "embedding_dimension": self.embedding_dimension,
             "rerank_enabled": self.rerank_enabled,
             "rerank_model": self.rerank_model if self.rerank_enabled else None,
@@ -103,6 +104,7 @@ class Settings(BaseSettings):
             "answer_model": self.answer_model if self.answer_enabled else None,
             "answer_temperature": self.answer_temperature if self.answer_enabled else None,
             "answer_top_p": self.answer_top_p if self.answer_enabled else None,
+            "answer_max_tokens": self.answer_max_tokens if self.answer_enabled else None,
             "sufficiency_judge_enabled": self.sufficiency_judge_enabled,
             "sufficiency_judge_model": (self.sufficiency_judge_model if self.sufficiency_judge_enabled else None),
             "sufficiency_judge_temperature": (
@@ -113,10 +115,13 @@ class Settings(BaseSettings):
             "max_top_k": self.max_top_k,
             "global_evidence_limit": self.global_evidence_limit,
             "max_chunks_per_document": self.max_chunks_per_document,
+            "rerank_candidates": self.rerank_candidates,
+            "max_subqueries": self.max_subqueries,
             "vector_score_threshold": self.vector_score_threshold,
             "rerank_score_threshold": self.rerank_score_threshold,
             "chunk_size": self.chunk_size,
             "chunk_overlap": self.chunk_overlap,
+            "embedding_batch_size": self.embedding_batch_size,
         }
 
 

@@ -4,11 +4,11 @@ from contextlib import asynccontextmanager
 from functools import lru_cache
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, Header, HTTPException, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Response, status
 
-from smart_rag import __version__
-from smart_rag.corpus import CorpusError
-from smart_rag.models import (
+from rag import __version__
+from rag.corpus import CorpusError
+from rag.models import (
     DocumentSummary,
     HealthResponse,
     IngestRequest,
@@ -16,10 +16,10 @@ from smart_rag.models import (
     QueryRequest,
     QueryResponse,
 )
-from smart_rag.providers import ProviderError
-from smart_rag.service import RagService
-from smart_rag.settings import Settings, get_settings
-from smart_rag.store import StoreError
+from rag.providers import ProviderError
+from rag.service import RagService
+from rag.settings import Settings, get_settings
+from rag.store import StoreError
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +38,8 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(
-    title="SMART RAG",
-    description="Standalone documentary retrieval and grounded-answer service for the SMART/AROMA corpus.",
+    title="RAG",
+    description="Documentary retrieval and evidence-grounded generation service.",
     version=__version__,
     lifespan=lifespan,
 )
@@ -65,11 +65,13 @@ def require_admin(
 
 
 @app.get("/health", response_model=HealthResponse, tags=["operations"])
-def health(service: ServiceDependency) -> HealthResponse:
+def health(response: Response, service: ServiceDependency) -> HealthResponse:
     try:
         qdrant_ok = service.store.health()
+        collection_exists = service.store.collection_exists() if qdrant_ok else False
     except Exception:
         qdrant_ok = False
+        collection_exists = False
     try:
         documents = service.load_documents()
         corpus_available = True
@@ -77,11 +79,13 @@ def health(service: ServiceDependency) -> HealthResponse:
         documents = []
         corpus_available = False
     healthy = qdrant_ok and corpus_available
+    if not healthy:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
     return HealthResponse(
         status="ok" if healthy else "degraded",
         qdrant="ok" if qdrant_ok else "unavailable",
         collection=service.settings.collection_name,
-        collection_exists=service.store.collection_exists() if qdrant_ok else False,
+        collection_exists=collection_exists,
         corpus_available=corpus_available,
         corpus_documents=len(documents),
     )

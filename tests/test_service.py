@@ -2,11 +2,11 @@ from typing import Any
 
 import pytest
 
-from smart_rag.models import DataQualityStatus, EvidenceItem, QueryBreadth, QueryPlan, QueryRequest
-from smart_rag.providers import ProviderError, RerankHit
-from smart_rag.service import RagService, select_candidates, validate_answer_citations
-from smart_rag.settings import Settings
-from smart_rag.store import SearchCandidate
+from rag.models import DataQualityStatus, EvidenceItem, QueryBreadth, QueryPlan, QueryRequest
+from rag.providers import ProviderError, RerankHit
+from rag.service import RagService, select_candidates, validate_answer_citations
+from rag.settings import Settings
+from rag.store import SearchCandidate
 
 
 def candidate(identifier: str, score: float, document: str) -> SearchCandidate:
@@ -100,3 +100,52 @@ def test_query_pipeline_returns_grounded_answer_and_auditable_evidence() -> None
     assert [item.evidence_id for item in response.evidence] == ["rag:two", "rag:one"]
     assert response.metadata["score_kind"] == "rerank"
     assert "retrieval_sufficiency_not_validated" in response.assessment.limitations
+
+
+def test_enabled_modules_complete_pipeline(service: RagService) -> None:
+    service.settings.query_planning_enabled = True
+    service.settings.rerank_enabled = True
+    service.settings.answer_enabled = True
+    service.settings.sufficiency_judge_enabled = True
+    service.ingest()
+    response = service.query(QueryRequest(query="water management"))
+    assert response.status is DataQualityStatus.OK
+    assert response.answer
+    assert response.plan.planning_degraded is False
+    assert response.metadata["score_kind"] == "rerank"
+    assert response.metadata["rerank_degraded"] is False
+
+
+@pytest.mark.parametrize("stage", ["plan", "rerank", "answer"])
+def test_optional_stage_failure_preserves_evidence(service: RagService, monkeypatch, stage: str) -> None:
+    service.settings.query_planning_enabled = True
+    service.settings.rerank_enabled = True
+    service.settings.answer_enabled = True
+    service.ingest()
+
+    def unavailable(*_: Any, **__: Any) -> None:
+        raise ProviderError("test provider unavailable")
+
+    monkeypatch.setattr(service.provider, stage, unavailable)
+    response = service.query(QueryRequest(query="water management"))
+    assert response.evidence
+    if stage == "plan":
+        assert response.plan.planning_degraded is True
+    elif stage == "rerank":
+        assert response.metadata["score_kind"] == "vector"
+        assert response.metadata["rerank_degraded"] is True
+    else:
+        assert response.answer is None
+        assert response.metadata["answer_error_type"] == "ProviderError"
+
+
+def test_embedding_failure_returns_source_error(service: RagService, monkeypatch) -> None:
+    service.ingest()
+
+    def unavailable(_: list[str]) -> list[list[float]]:
+        raise ProviderError("test embeddings unavailable")
+
+    monkeypatch.setattr(service.provider, "embed", unavailable)
+    response = service.query(QueryRequest(query="water management"))
+    assert response.status is DataQualityStatus.SOURCE_ERROR
+    assert response.evidence == []

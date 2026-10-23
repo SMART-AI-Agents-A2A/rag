@@ -1,4 +1,4 @@
-from smart_rag.cli import main
+from rag.cli import main
 
 if __name__ == "__main__":
     main()

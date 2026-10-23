@@ -6,8 +6,8 @@ from typing import Any
 
 import httpx
 
-from smart_rag.models import EvidenceItem, MetadataFilters, QueryBreadth, QueryPlan
-from smart_rag.settings import Settings
+from rag.models import EvidenceItem, MetadataFilters, QueryBreadth, QueryPlan
+from rag.settings import Settings
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ class OpenRouterClient:
             headers={
                 "Authorization": f"Bearer {settings.openrouter_api_key}",
                 "Content-Type": "application/json",
-                "User-Agent": "smart-rag/1.0",
+                "User-Agent": "rag/1.0",
             },
         )
 
@@ -77,7 +77,7 @@ class OpenRouterClient:
         return resolved
 
     def probe_dimension(self) -> int:
-        return len(self.embed(["SMART RAG embedding dimension probe"])[0])
+        return len(self.embed(["Embedding dimension probe"])[0])
 
     def rerank(self, *, query: str, documents: list[str]) -> list[RerankHit]:
         if not documents:
